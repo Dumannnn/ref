@@ -55,7 +55,8 @@ def profile(request):
         
     else:
         form = UserProfileForm(instance=user)
-    
+        orders = Order.objects.filter(user=user)
     return render(request, 'users/profile.html', {
         'form': form,
+        'orders': orders,
     })
