@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView
 from .models import EatingItem, Category, Dish, DishType, \
-    EatingItemDish, Dish, EatingItem, EatingItemDish
+    EatingItemDish
 from django.db.models import Q
 
 
@@ -13,8 +13,8 @@ class MenuView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         category_slugs = self.request.GET.getlist('category')
-        size_names = self.request.GET.getlist('dish')
-        type_ids = self.request.GET.getlist('type') 
+        dish_names = self.request.GET.getlist('dish')
+        type_ids = self.request.GET.getlist('dish_type') 
         min_price = self.request.GET.get('min_price')
         max_price = self.request.GET.get('max_price')
         search_query = self.request.GET.get('q')
@@ -22,14 +22,14 @@ class MenuView(ListView):
         if category_slugs: 
             queryset = queryset.filter(category__slug__in=category_slugs)
 
-        if size_names:
+        if dish_names:
             queryset = queryset.filter(
-                Q(sizes__name__in=size_names) & Q(sizes__clothingitemsize__available=True)
+                Q(dishes__name__in=dish_names) & Q(dishes__eatingitemdish__available=True)
             ).distinct()
 
         if type_ids:
             queryset = queryset.filter(
-                dishes__types__id__in=type_ids
+                dish_types__id__in=type_ids
             ).distinct()
 
         if min_price:
@@ -54,7 +54,7 @@ class MenuView(ListView):
         context['dish_types'] = DishType.objects.all()  
         context['selected_categories'] = self.request.GET.getlist('category')
         context['selected_dishes'] = self.request.GET.getlist('dish')
-        context['selected_dish_types'] = self.request.GET.getlist('type') 
+        context['selected_dish_types'] = self.request.GET.getlist('dish_type') 
         context['min_price'] = self.request.GET.get('min_price', '')
         context['max_price'] = self.request.GET.get('max_price', '')
 
@@ -75,3 +75,5 @@ class EatingItemDetailView(DetailView):
                                                            available=True)
         context['available_dishes'] = available_dishes
         return context
+    
+    

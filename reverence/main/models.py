@@ -51,6 +51,8 @@ class EatingItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     price = models.DecimalField(max_digits=20, decimal_places=2)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
+    dish_types = models.ManyToManyField(DishType, blank=True, related_name='eating_items')
+
     
 
     def __str__(self):
