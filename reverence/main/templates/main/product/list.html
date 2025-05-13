@@ -5,6 +5,7 @@
 
 {% block content %}
     <h1 class="rev-head text-uppercase" id="reverence-title">Reverence interlude - ALL</h1>
+    <a href="{% url 'reviews:review_list' %}" class="btn-outline-primary mb-3">Отзывы</a>
     <div class="menu d-flex">
         <form action="{% url "main:menu" %}" method="get" class="sidebar" id="filter-form">
             <h4 class="price-head">Price Range:</h4>

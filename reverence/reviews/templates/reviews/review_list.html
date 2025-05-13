@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Отзывы</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+  <h1>Отзывы</h1>
+  <a class="btn btn-primary mb-3" href="{% url 'reviews:submit_review' %}">Оставить отзыв</a>
+  {% for review in reviews %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ review.author }} ({{ review.rating }}/5)</h5>
+        <p class="card-text">{{ review.content }}</p>
+        <small class="text-muted">{{ review.created_at|date:"d.m.Y H:i" }}</small>
+      </div>
+    </div>
+  {% empty %}
+    <p>Отзывов пока нет.</p>
+  {% endfor %}
+</body>
+</html>
