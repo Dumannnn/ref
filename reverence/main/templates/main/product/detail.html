@@ -17,7 +17,7 @@
 
         <div class="detail-description">
             <h2 class="text-uppercase">{{ eating_item.name }}</h2>
-            <h3 class="item-desc">{{ clothing_item.description|linebreaks }}</h3>
+            <h3 class="item-desc">{{ eating_item.description|linebreaks }}</h3>
             <div class="dishes">
                 <p>Available dishes:
                     <ul class="dishes-list d-flex gap-3">
@@ -31,7 +31,7 @@
                     </ul>
                 </p>
             </div>
-            {% if clothing_item.discount %}
+            {% if eating_item.discount %}
                 <div class="cart-discount d-flex gap-2">
                     <p class="line">₸{{ eating_item.price }}</p>
                     <p class="price">₸{{ eating_item.get_price_with_discount|floatformat:2 }}</p>
@@ -42,7 +42,7 @@
                 </p>
             {% endif %}
             <div class="detail-cart-form">
-                <form action="#" method="post">
+                <form action="{% url 'cart:cart_add' eating_item.id %}" method="post">
                     {% csrf_token %}
                     <div class="select-dish d-flex gap-2">
                         <label for="dish">Dish:</label>
@@ -58,15 +58,15 @@
     </div>
 
     <script>
-        const sizeItems = document.querySelectorAll('.dish-name');
-        const sizeDisplay = document.getElementById('dish-display');
-        const sizeInput = document.getElementById('dish');
+        const dishItems = document.querySelectorAll('.dish-name');
+        const dishDisplay = document.getElementById('dish-display');
+        const dishInput = document.getElementById('dish');
 
-        sizeItems.forEach(item => {
+        dishItems.forEach(item => {
             item.addEventListener('click', () => {
-                sizeInput.value = item.getAttribute('data-dish');
-                sizeDisplay.textContent = item.getAttribute('data-dish');
-                sizeItems.forEach(i => i.classList.remove('detail-selected'));
+                dishInput.value = item.getAttribute('data-dish');
+                dishDisplay.textContent = item.getAttribute('data-dish');
+                dishItems.forEach(i => i.classList.remove('detail-selected'));
                 item.classList.add('detail-selected');
             });
         });
