@@ -15,10 +15,11 @@ class MenuView(ListView):
         category_slugs = self.request.GET.getlist('category')
         dish_names = self.request.GET.getlist('dish')
         type_ids = self.request.GET.getlist('dish_type') 
+        
         min_price = self.request.GET.get('min_price')
         max_price = self.request.GET.get('max_price')
         search_query = self.request.GET.get('q')
-
+        type_ids = [int(i) for i in type_ids if i.isdigit()]
         if category_slugs: 
             queryset = queryset.filter(category__slug__in=category_slugs)
 
