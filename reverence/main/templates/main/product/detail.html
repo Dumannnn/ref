@@ -1,0 +1,100 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Reverence Interlude - {{ eating_item.name }}{% endblock title %}
+
+{% block content %}
+    <div class="detail-product d-flex">
+        <div class="detail-img d-flex justify-content-center">
+            {% for image in eating_item.images.all %}
+                <img src="{{ image.image.url }}" style="display: none;" alt="{{ eating_item.name }}" class="detail-image" data-index="{{ forloop.counter0 }}">
+            {% endfor %}
+            <div class="image-nav d-flex justify-content-between">
+                <button class="prev-btn">&lsaquo;</button>
+                <button class="next-btn">&rsaquo;</button>
+            </div>
+        </div>
+
+        <div class="detail-description">
+            <h2 class="text-uppercase">{{ eating_item.name }}</h2>
+            <h3 class="item-desc">{{ clothing_item.description|linebreaks }}</h3>
+            <div class="dishes">
+                <p>Available dishes:
+                    <ul class="dishes-list d-flex gap-3">
+                        {% for item_dish in available_dishes %}
+                            <li class="dish-name d-flex justify-content-center align-items-center" data-dish="{{ item_dish.dish.name }}">
+                                {{ item_dish.dish.name }}
+                            </li>
+                        {% empty %}
+                            <li>No available dishes.addEventListener</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            </div>
+            {% if clothing_item.discount %}
+                <div class="cart-discount d-flex gap-2">
+                    <p class="line">₸{{ eating_item.price }}</p>
+                    <p class="price">₸{{ eating_item.get_price_with_discount|floatformat:2 }}</p>
+                </div>
+            {% else %}
+                <p class="detail-price">
+                    ₸{{ eating_item.price }}
+                </p>
+            {% endif %}
+            <div class="detail-cart-form">
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <div class="select-dish d-flex gap-2">
+                        <label for="dish">Dish:</label>
+                        <div id="dish-display">
+                            unselected
+                        </div>
+                    </div>
+                    <input type="hidden" name="dish" id="dish" required>
+                    <button type="submit" class="default-btn mt-3">Add to cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sizeItems = document.querySelectorAll('.dish-name');
+        const sizeDisplay = document.getElementById('dish-display');
+        const sizeInput = document.getElementById('dish');
+
+        sizeItems.forEach(item => {
+            item.addEventListener('click', () => {
+                sizeInput.value = item.getAttribute('data-dish');
+                sizeDisplay.textContent = item.getAttribute('data-dish');
+                sizeItems.forEach(i => i.classList.remove('detail-selected'));
+                item.classList.add('detail-selected');
+            });
+        });
+
+        const images = document.querySelectorAll('.detail-image');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentIndex = 0;
+    
+        if (images.length > 0) {
+            images[currentIndex].style.display = 'block';
+    
+            if (images.length === 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            } else {
+                prevBtn.addEventListener('click', () => {
+                    images[currentIndex].style.display = 'none';
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    images[currentIndex].style.display = 'block';
+                });
+    
+                nextBtn.addEventListener('click', () => {
+                    images[currentIndex].style.display = 'none';
+                    currentIndex = (currentIndex + 1) % images.length; 
+                    images[currentIndex].style.display = 'block';
+                });
+            }
+        }
+    </script>
+{% endblock content %}
