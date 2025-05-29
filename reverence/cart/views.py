@@ -13,7 +13,7 @@ def cart_detail(request):
 def cart_add(request, item_id):
     cart = Cart(request)
     eating_item = get_object_or_404(EatingItem, id=item_id)
-    dish = request.POST.get('size')
+    dish = request.POST.get('dish')
 
     if dish:
         try:
@@ -32,7 +32,7 @@ def cart_add(request, item_id):
             dish_obj = available_dishes.first()
             dish = dish_obj.name
         else:
-            return redirect('cart:cart_detil')
+            return redirect('cart:cart_detail')
 
     cart.add(eating_item, dish)
     return redirect('cart:cart_detail')

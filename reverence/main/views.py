@@ -30,7 +30,7 @@ class MenuView(ListView):
 
         if type_ids:
             queryset = queryset.filter(
-                dish_types__id__in=type_ids
+                Q(dishes__types__id__in=type_ids) & Q(dishes__eatingitemdish__available=True)
             ).distinct()
 
         if min_price:

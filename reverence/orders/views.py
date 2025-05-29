@@ -48,7 +48,7 @@ def order_create(request):
                     line_items=[
                         {
                             'price_data': {
-                                'currency': 'usd',
+                                'currency': 'KZT',
                                 'product_data': {
                                     'name': item['item'].name,
                                 },
